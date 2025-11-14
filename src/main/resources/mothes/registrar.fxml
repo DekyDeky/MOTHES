@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mothes.controllers.RegistrarController">
    <children>
       <Label fx:id="registerNicknameLabel" layoutX="315.0" layoutY="84.0" text="Apelido">
@@ -45,12 +44,12 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="registerMothNameLabel" layoutX="316.0" layoutY="195.0" text="Nome da Mariposa">
+      <Label fx:id="registerMothNameLabel" layoutX="315.0" layoutY="176.0" text="Nome da Mariposa">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="registerMothNameField" layoutX="315.0" layoutY="222.0" prefHeight="39.0" prefWidth="256.0">
+      <TextField fx:id="registerMothNameField" layoutX="314.0" layoutY="203.0" prefHeight="39.0" prefWidth="256.0">
          <font>
             <Font size="18.0" />
          </font>
@@ -90,12 +89,12 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="registerNicknameErrorLabel" alignment="TOP_LEFT" layoutX="315.0" layoutY="150.0" prefHeight="39.0" prefWidth="256.0" styleClass="error-label" text="-">
+      <Label fx:id="registerNicknameErrorLabel" alignment="TOP_LEFT" layoutX="314.0" layoutY="151.0" prefHeight="20.0" prefWidth="256.0" styleClass="error-label" text="-">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="registerMothNameErrorLabel" layoutX="316.0" layoutY="261.0" styleClass="error-label" stylesheets="@styles/registrar.css" text="-">
+      <Label fx:id="registerMothNameErrorLabel" layoutX="315.0" layoutY="242.0" styleClass="error-label" stylesheets="@styles/registrar.css" text="-">
          <font>
             <Font size="14.0" />
          </font>

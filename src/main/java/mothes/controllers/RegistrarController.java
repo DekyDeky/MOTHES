@@ -6,11 +6,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import mothes.model.bean.Mariposa;
 import mothes.model.bean.Usuario;
+import mothes.model.dao.MariposaDAO;
 import mothes.model.dao.UsuarioDAO;
 
 import java.io.IOException;
@@ -161,7 +164,23 @@ public class RegistrarController {
             Usuario novoUsuario = new Usuario(0, apelido, email, senha, 0);
             UsuarioDAO registarUsuario = new UsuarioDAO();
 
-            registarUsuario.createUser(novoUsuario);
+            int idUsuario = registarUsuario.createUser(novoUsuario);
+
+            if(idUsuario == 0){
+                new Alert(Alert.AlertType.ERROR,
+                        "Falha ao gerar id do usuário!"
+                ).showAndWait();
+            }else {
+                Mariposa novaMariposa = new Mariposa(0, nomeMariposa, 0, 0, idUsuario);
+                MariposaDAO registrarMariposa = new MariposaDAO();
+
+                if(registrarMariposa.createMariposa(novaMariposa)){
+                    new Alert(Alert.AlertType.INFORMATION,
+                            "Cadastro concluido!"
+                    ).showAndWait();
+                };
+
+            }
 
             this.cancel(event);
         }
