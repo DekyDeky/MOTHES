@@ -16,11 +16,12 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 
 public class HelloController {
+    /*
     @FXML
     TextField emailField;
 
     @FXML
-    PasswordField passwordField;
+    PasswordField passwordField;*/
 
     private Stage stage;
     private Scene scene;
@@ -31,9 +32,8 @@ public class HelloController {
 
     public void login(ActionEvent event) throws IOException {
 
-        String email = emailField.getText();
-        String senha = passwordField.getText();
-
+        /*String email = emailField.getText();
+        String senha = passwordField.getText();*/
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/mothes/home.fxml"));
         root = loader.load();
@@ -49,7 +49,7 @@ public class HelloController {
         });
 
         HomeController homePage = loader.getController();
-        homePage.displayTeste(email, senha);
+        //homePage.displayTeste(email, senha);
 
         stage = new Stage();
         scene = new Scene(root);
