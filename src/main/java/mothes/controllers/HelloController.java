@@ -6,22 +6,31 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import mothes.model.bean.Usuario;
+import mothes.model.dao.UsuarioDAO;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class HelloController {
-    /*
+
     @FXML
     TextField emailField;
 
     @FXML
-    PasswordField passwordField;*/
+    PasswordField passwordField;
+
+    @FXML
+    Label loginErrorLabel;
 
     private Stage stage;
     private Scene scene;
@@ -30,41 +39,67 @@ public class HelloController {
     private double xOffset = 0;
     private double yOffset = 0;
 
-    public void login(ActionEvent event) throws IOException {
+    public void login(ActionEvent event) throws IOException, SQLException {
 
-        /*String email = emailField.getText();
-        String senha = passwordField.getText();*/
+        String email = emailField.getText();
+        String senha = passwordField.getText();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/mothes/home.fxml"));
-        root = loader.load();
+        UsuarioDAO loginUsuarios = new UsuarioDAO();
+        ArrayList<Usuario> Usuarios = loginUsuarios.readUsers();
 
-        root.setOnMousePressed(Mevent -> {
-            xOffset = Mevent.getSceneX();
-            yOffset = Mevent.getSceneY();
-        });
+        if(Usuarios.isEmpty()) {
+            new Alert(Alert.AlertType.ERROR,
+                    "Falha ao identificar Usuário.\nErro: "
+            ).showAndWait();
+            return;
+        }
 
-        root.setOnMouseDragged(Mevent -> {
-            stage.setX(Mevent.getScreenX() - xOffset);
-            stage.setY(Mevent.getScreenY() - yOffset);
-        });
+        for (Usuario user : Usuarios){
+            if(Objects.equals(user.getEmail(), email)){
+                if(Objects.equals(user.getSenha(), senha)){
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/mothes/home.fxml"));
+                    root = loader.load();
 
-        HomeController homePage = loader.getController();
-        //homePage.displayTeste(email, senha);
+                    root.setOnMousePressed(Mevent -> {
+                        xOffset = Mevent.getSceneX();
+                        yOffset = Mevent.getSceneY();
+                    });
 
-        stage = new Stage();
-        scene = new Scene(root);
-        scene.setFill(Color.TRANSPARENT);
+                    root.setOnMouseDragged(Mevent -> {
+                        stage.setX(Mevent.getScreenX() - xOffset);
+                        stage.setY(Mevent.getScreenY() - yOffset);
+                    });
 
-        String style = this.getClass().getResource("/mothes/styles/home.css").toExternalForm();
-        scene.getStylesheets().add(style);
+                    HomeController homePage = loader.getController();
+                    //homePage.displayTeste(email, senha);
 
-        stage.initStyle(StageStyle.TRANSPARENT);
+                    stage = new Stage();
+                    scene = new Scene(root);
+                    scene.setFill(Color.TRANSPARENT);
 
-        stage.setScene(scene);
-        stage.show();
+                    String style = this.getClass().getResource("/mothes/styles/home.css").toExternalForm();
+                    scene.getStylesheets().add(style);
 
-        Stage stageAnterior = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stageAnterior.close();
+                    stage.initStyle(StageStyle.TRANSPARENT);
+
+                    stage.setScene(scene);
+                    stage.show();
+
+                    Stage stageAnterior = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    stageAnterior.close();
+                } else {
+                    loginErrorLabel.setText("Email ou Senha incorretos!");
+                    return;
+                }
+            }else {
+                loginErrorLabel.setText("Email ou Senha incorretos!");
+                return;
+            }
+        }
+
+
+
+
 
     }
 
