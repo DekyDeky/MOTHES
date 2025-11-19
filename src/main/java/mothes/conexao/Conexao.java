@@ -9,10 +9,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Conexao {
+    //Dados de conexão com o DB
     private static final String URL = "jdbc:mysql://localhost:3306/mothes";
     private static final String USUARIO = "root";
     private static final String SENHA = "root";
 
+    //Conexão
     public static Connection getConexao() {
         try {
             return DriverManager.getConnection(URL, USUARIO, SENHA);
@@ -22,6 +24,7 @@ public class Conexao {
         }
     }
 
+    //Métodos para fecha conexão
     public static void fecharConexao(Connection con) {
         try {
             if (con != null) {

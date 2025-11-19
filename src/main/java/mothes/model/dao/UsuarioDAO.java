@@ -17,12 +17,13 @@ public class UsuarioDAO {
         PreparedStatement stmt = null;
 
         try {
-            String query = "INSERT INTO usuarios(apelido, email, senhaHash) VALUES (?, ?, ?)";
+            String query = "INSERT INTO usuarios(apelido, email, senhaHash, salt) VALUES (?, ?, ?, ?)";
 
             stmt = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setString(1, user.getApelido());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getSenha());
+            stmt.setString(4, user.getSalt64());
 
             stmt.executeUpdate();
 
@@ -66,8 +67,9 @@ public class UsuarioDAO {
                 int idUsuario = rs.getInt("idUsuario");
                 String email = rs.getString("email");
                 String senha = rs.getString("senhaHash");
+                String salt64 = rs.getString("salt");
                 
-                Usuario user = new Usuario(idUsuario, email, senha);
+                Usuario user = new Usuario(idUsuario, email, senha, salt64);
                 
                 listaUsuarios.add(user);
                
@@ -84,6 +86,43 @@ public class UsuarioDAO {
         
         return listaUsuarios;
         
+    }
+
+    public Usuario getUserByEmail(String email){
+        Connection con = Conexao.getConexao();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        Usuario userInfo = new Usuario();
+
+        try {
+            String query = "SELECT * FROM usuarios WHERE email = ?";
+            stmt = con.prepareStatement(query);
+            stmt.setString(1, email);
+
+            rs = stmt.executeQuery();
+
+            if(!rs.next()){
+                return null;
+            }
+
+            userInfo.setId(rs.getInt("idUsuario"));
+            userInfo.setApelido(rs.getString("apelido"));
+            userInfo.setEmail(rs.getString("email"));
+            userInfo.setSenha(rs.getString("senhaHash"));
+            userInfo.setQntMoeda(rs.getInt("qntMoeda"));
+            userInfo.setSalt64(rs.getString("salt"));
+
+        } catch (SQLException ex) {
+            new Alert(Alert.AlertType.ERROR,
+                    "Erro ao consultar o banco de dados.\nErro: " + ex.getMessage()
+            ).showAndWait();
+            userInfo = null;
+        }finally {
+            Conexao.fecharConexao(con, stmt, rs);
+        }
+
+        return userInfo;
     }
 
 }

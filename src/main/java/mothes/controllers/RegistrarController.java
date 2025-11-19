@@ -15,6 +15,12 @@ import mothes.model.bean.Mariposa;
 import mothes.model.bean.Usuario;
 import mothes.model.dao.MariposaDAO;
 import mothes.model.dao.UsuarioDAO;
+import mothes.util.PasswordHash;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.SecureRandom;
+import java.util.Base64;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -152,7 +158,7 @@ public class RegistrarController {
     }
 
 
-    public void register(ActionEvent event) throws IOException {
+    public void register(ActionEvent event) throws Exception {
 
         String email = registerEmailField.getText();
         String senha = registerPasswordField.getText();
@@ -160,8 +166,14 @@ public class RegistrarController {
         String apelido = registerNicknameField.getText();
         String nomeMariposa = registerMothNameField.getText();
 
+
         if(!validation(email, senha, confSenha, apelido, nomeMariposa)){
-            Usuario novoUsuario = new Usuario(0, apelido, email, senha, 0);
+
+            byte[] salt = PasswordHash.generateSalt(); //Gera o salt para a senha do usuário
+            String senhaHash = PasswordHash.hashPassword(senha, salt); //Hash a senha
+            String saltBase64 = Base64.getEncoder().encodeToString(salt); //Transforma o salt em String via Base64
+
+            Usuario novoUsuario = new Usuario(0, apelido, email, senhaHash, 0, saltBase64);
             UsuarioDAO registarUsuario = new UsuarioDAO();
 
             int idUsuario = registarUsuario.createUser(novoUsuario);
