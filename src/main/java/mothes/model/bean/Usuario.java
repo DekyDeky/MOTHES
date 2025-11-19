@@ -14,6 +14,12 @@ public class Usuario {
         this.senha = senha;
         this.qntMoeda = qntMoeda;
     }
+    
+    public Usuario(int id, String email, String senha) {
+        this.id = id;
+        this.email = email;
+        this.senha = senha;
+    }
 
     public int getId() {
         return id;
