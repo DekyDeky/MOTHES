@@ -6,6 +6,7 @@ import mothes.model.bean.Mariposa;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MariposaDAO {
@@ -39,6 +40,42 @@ public class MariposaDAO {
         }finally {
             Conexao.fecharConexao(con, stmt);
         }
+    }
+
+    public static Mariposa getMariposaByUsuarioID(int UsuarioID){
+        Connection con = Conexao.getConexao();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        Mariposa mariposa = new Mariposa();
+
+        try {
+            String query = "SELECT * FROM mariposa WHERE idUsuario = ?";
+            stmt = con.prepareStatement(query);
+            stmt.setString(1, String.valueOf(UsuarioID));
+
+            rs = stmt.executeQuery();
+
+            if(!rs.next()){
+                return null;
+            }
+
+            mariposa.setIdMariposa(rs.getInt("idMariposa"));
+            mariposa.setNome(rs.getString("nome"));
+            mariposa.setEstagio(rs.getInt("estagio"));
+            mariposa.setQntNectar(rs.getDouble("qntNectarReal"));
+            mariposa.setIdUsuario(rs.getInt("idUsuario"));
+
+        } catch (SQLException ex) {
+            new Alert(Alert.AlertType.ERROR,
+                    "Erro ao consultar o banco de dados.\nErro: " + ex.getMessage()
+            ).showAndWait();
+            mariposa = null;
+        } finally {
+            Conexao.fecharConexao(con, stmt, rs);
+        }
+
+        return mariposa;
     }
 
 }

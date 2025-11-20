@@ -13,8 +13,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import mothes.model.bean.Mariposa;
 import mothes.model.bean.Usuario;
+import mothes.model.dao.MariposaDAO;
 import mothes.model.dao.UsuarioDAO;
+import mothes.util.LocalStorage;
 import mothes.util.PasswordHash;
 
 import java.io.IOException;
@@ -60,6 +63,16 @@ public class HelloController {
         String senhaLoginHash = PasswordHash.hashPassword(senha, salt);
 
         if(senhaHash.equals(senhaLoginHash)){
+            Mariposa mariposa = MariposaDAO.getMariposaByUsuarioID(loginUser.getId());
+            if(mariposa == null){
+                return false;
+            }
+
+            loginUser.setSalt64("");
+            loginUser.setSenha("");
+            LocalStorage.saveUserInfo(loginUser, mariposa);
+
+            System.out.println(LocalStorage.getPath());
             return true;
         }else {
             loginErrorLabel.setText("Email ou senha incorretos!");

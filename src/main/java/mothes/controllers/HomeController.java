@@ -2,27 +2,41 @@ package mothes.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import mothes.model.bean.Mariposa;
+import mothes.util.LocalStorage;
 
-public class HomeController {
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class HomeController implements Initializable{
 
     @FXML
     private AnchorPane homePane;
     @FXML
     private Button exitBtn;
-
     @FXML
-    private Label emailTeste;
-
-    @FXML
-    private Label senhaTeste;
+    private Label nomeMariposaLabel;
 
     Stage stage;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resourceBundle) {
+        Mariposa mariposa = LocalStorage.loadMariposa();
+
+        if (mariposa != null) {
+            nomeMariposaLabel.setText(mariposa.getNome());
+        } else {
+            nomeMariposaLabel.setText("Erro");
+        }
+    }
 
     public void closeProgram(ActionEvent event){
 
@@ -38,9 +52,5 @@ public class HomeController {
 
     }
 
-    public void displayTeste(String email, String senha){
-        emailTeste.setText("Email: " + email);
-        senhaTeste.setText("Senha: " + senha);
-    }
 
 }
