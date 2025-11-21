@@ -1,5 +1,6 @@
 package mothes.controllers;
 
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,7 +9,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import mothes.model.bean.Mariposa;
 import mothes.util.LocalStorage;
 
@@ -16,26 +19,21 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HomeController implements Initializable{
+public class HomeController {
 
     @FXML
     private AnchorPane homePane;
+
     @FXML
-    private Button exitBtn;
-    @FXML
-    private Label nomeMariposaLabel;
+    private Pane homeMenuPane;
+//    @FXML
+//    private Button exitBtn;
+
 
     Stage stage;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resourceBundle) {
-        Mariposa mariposa = LocalStorage.loadMariposa();
-
-        if (mariposa != null) {
-            nomeMariposaLabel.setText(mariposa.getNome());
-        } else {
-            nomeMariposaLabel.setText("Erro");
-        }
+    public void showMenu(){
+        homeMenuPane.setVisible(!homeMenuPane.isVisible());
     }
 
     public void closeProgram(ActionEvent event){

@@ -1,7 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
 .root {
     -fx-background-color: transparent;
+    -fx-font-family: "Montserrat", sans-serif;;
 }
 
 .footerPane {
-    -fx-background-color: gray;
+    -fx-background-color: #FBF6F2;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.timeContainer {
+    -fx-background-color: #BF8449;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.timerPrincipal {
+    -fx-font-weight: bold;
+    -fx-text-fill: #FBF6F2;
+}
+
+.timerNext {
+    -fx-font-weight: bold;
+    -fx-text-fill: #ECB37A;
+}
+
+.beginBtn {
+    -fx-background-color: #ECB37A;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.beginBtn:hover {
+    -fx-background-color: #f3a455;
+}
+
+.menuShowBtn {
+    -fx-background-color: #FBF6F2;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.menuShowBtn:hover {
+    -fx-background-color: #e4deda;
 }
