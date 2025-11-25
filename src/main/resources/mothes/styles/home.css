@@ -33,6 +33,10 @@
     -fx-background-radius: 5px;
 }
 
+.menu {
+    -fx-background-color: #BF8449;
+}
+
 .beginBtn:hover {
     -fx-background-color: #f3a455;
 }
@@ -45,4 +49,12 @@
 
 .menuShowBtn:hover {
     -fx-background-color: #e4deda;
+}
+
+.menuBtn {
+    -fx-background-color: #BF8449;
+}
+
+.menuBtn:hover {
+    -fx-background-color: #f3a455;
 }

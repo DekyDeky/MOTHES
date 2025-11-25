@@ -26,6 +26,8 @@ public class HomeController {
 
     @FXML
     private Pane homeMenuPane;
+    @FXML
+    private Pane timeConfigPane;
 //    @FXML
 //    private Button exitBtn;
 
@@ -34,6 +36,7 @@ public class HomeController {
 
     public void showMenu(){
         homeMenuPane.setVisible(!homeMenuPane.isVisible());
+        timeConfigPane.setVisible(!timeConfigPane.isVisible());
     }
 
     public void closeProgram(ActionEvent event){
