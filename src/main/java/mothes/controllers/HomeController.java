@@ -16,13 +16,17 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import mothes.model.bean.Acessorio;
+import mothes.model.bean.Estudo;
 import mothes.model.bean.Mariposa;
 import mothes.model.bean.Usuario;
+import mothes.model.dao.EstudoDAO;
 import mothes.util.LocalStorage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class HomeController {
@@ -46,16 +50,20 @@ public class HomeController {
     @FXML private Label moneyLabel;
 
     private Usuario sessaoAtual = LocalStorage.loadUser();
+    private List<Estudo> estudos;
 
     ArrayList<Acessorio> acessorios = new ArrayList<>();
 
     Stage stage;
 
-    public void initialize() throws IOException {
-        ObservableList<String> options = FXCollections.observableArrayList(
-                "Teste 1",
-                "Teste 2"
-        );
+    public void initialize() throws IOException, SQLException {
+        estudos = EstudoDAO.getEstudoByUsuarioID(sessaoAtual.getId());
+
+        ObservableList<String> options = FXCollections.observableArrayList();
+
+        for (Estudo e : estudos) {
+            options.add(e.getNome());
+        }
 
         StudiesComboBox.setItems(options);
 
