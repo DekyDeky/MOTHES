@@ -13,6 +13,13 @@ public class Estudo {
     public Estudo() {
     }
 
+    public Estudo(String nome, int ciclos, Time tempoEstudo, Time tempoDescanso) {
+        this.nome = nome;
+        this.ciclos = ciclos;
+        this.tempoEstudo = tempoEstudo;
+        this.tempoDescanso = tempoDescanso;
+    }
+
     public int getIdEstudo() {
         return idEstudo;
     }

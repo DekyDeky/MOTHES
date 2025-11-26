@@ -14,7 +14,7 @@ import java.util.List;
 
 public class EstudoDAO {
 
-    public boolean createEstudo(Estudo estudo, int idUsuario){
+    public static void createEstudo(Estudo estudo, int idUsuario){
         Connection con = Conexao.getConexao();
         PreparedStatement stmt = null;
 
@@ -34,13 +34,10 @@ public class EstudoDAO {
                     "Estudo cadastrado com sucesso!"
             ).showAndWait();
 
-            return true;
-
         } catch (SQLException ex) {
             new Alert(Alert.AlertType.ERROR,
                     "Falha ao cadastrar estudo.\nErro: " + ex.getMessage()
             ).showAndWait();
-            return false;
         } finally {
             Conexao.fecharConexao(con, stmt);
         }
@@ -55,7 +52,7 @@ public class EstudoDAO {
         List<Estudo> estudos = new ArrayList<>();
 
         try {
-            String query = "SELECT * FROM estudos WHERE idUsuario = ?";
+            String query = "SELECT * FROM estudo WHERE idUsuario = ?";
             stmt = con.prepareStatement(query);
             stmt.setInt(1, usuarioId);
 
@@ -69,6 +66,8 @@ public class EstudoDAO {
                 estudo.setCiclos(rs.getInt("ciclos"));
                 estudo.setTempoEstudo(rs.getTime("tempoEstudo"));
                 estudo.setTempoDescanso(rs.getTime("tempoDescanso"));
+
+                estudos.add(estudo);
 
             }
         } catch (SQLException ex) {

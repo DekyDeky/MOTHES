@@ -20,19 +20,25 @@ import mothes.model.bean.Estudo;
 import mothes.model.bean.Mariposa;
 import mothes.model.bean.Usuario;
 import mothes.model.dao.EstudoDAO;
+import mothes.util.Converter;
 import mothes.util.LocalStorage;
+import mothes.util.Validation;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class HomeController {
 
     @FXML private AnchorPane homePane;
-    @FXML private ComboBox<String> StudiesComboBox;
+    @FXML private ComboBox<String> studiesComboBox;
+    @FXML private Label timerPrincipalLabel;
+    @FXML private Label timerNextLabel;
 
     @FXML private Pane homeMenuPane;
 
@@ -46,6 +52,18 @@ public class HomeController {
     @FXML private Button furnitureShopBtn;
     @FXML private Button timerConfigBtn;
     @FXML private Button configBtn;
+
+    @FXML private TextField titleStudyTextField;
+    @FXML private TextField restHourTextField;
+    @FXML private TextField restMinTextField;
+    @FXML private TextField restSecTextField;
+    @FXML private TextField workHourTextField;
+    @FXML private TextField workMinTextField;
+    @FXML private TextField workSecTextField;
+    @FXML private TextField cyclesStudyTextField;
+    @FXML private Label timerErroLabel;
+    @FXML private Button saveStudyBtn;
+
 
     @FXML private Label moneyLabel;
 
@@ -65,7 +83,7 @@ public class HomeController {
             options.add(e.getNome());
         }
 
-        StudiesComboBox.setItems(options);
+        studiesComboBox.setItems(options);
 
         loadItems();
 
@@ -109,6 +127,74 @@ public class HomeController {
     public void showConfig(){ bringToFront(configPane); }
     public void showHatsShop(){bringToFront(hatsShopScrollPane);}
     //public void showFunirtureShop(){bringToFront(furnitureShopMenu);}
+
+    public void createEstudo() throws ParseException {
+        String estudoNome = titleStudyTextField.getText().trim();
+
+        String horaTrabStr = workHourTextField.getText().trim();
+        String minTrabStr = workMinTextField.getText().trim();
+        String secTrabStr = workSecTextField.getText().trim();
+
+        String horaDescStr = restHourTextField.getText().trim();
+        String minDescStr = restMinTextField.getText().trim();
+        String secDescStr = restSecTextField.getText().trim();
+
+        String cyclesStr = cyclesStudyTextField.getText().trim();
+
+        String[] numberStrFields = {horaTrabStr, minTrabStr, secTrabStr, horaDescStr, minDescStr, secDescStr, cyclesStr};
+
+        if(horaTrabStr.isEmpty()){
+            horaTrabStr = "00";
+        }
+
+        if(horaDescStr.isEmpty()){
+            horaDescStr = "00";
+        }
+
+        for(String str : numberStrFields) {
+            if(!Validation.isNumeric(str)){
+                timerErroLabel.setText("Campo numérico inválido!");
+                return;
+            }
+        }
+
+        if(estudoNome.isEmpty()){
+            timerErroLabel.setText("O título é obrigatório");
+            return;
+        }
+
+
+        Estudo newEstudo = new Estudo(
+                estudoNome,
+                Integer.parseInt(cyclesStr),
+                Converter.StrToSQLTime(horaTrabStr, minTrabStr, secTrabStr),
+                Converter.StrToSQLTime(horaDescStr, minDescStr, secDescStr)
+        );
+
+        EstudoDAO.createEstudo(newEstudo, sessaoAtual.getId());
+
+    }
+
+    public void onComboChange(ActionEvent event){
+        for(Estudo estudo : estudos) {
+            if(Objects.equals(studiesComboBox.getValue(), estudo.getNome())){
+
+                String tempoEstudo = estudo.getTempoEstudo().toString();
+                String tempoDescanso = estudo.getTempoDescanso().toString();
+
+                if(tempoEstudo.startsWith("00")){
+                    tempoEstudo = tempoEstudo.substring(3);
+                }
+
+                if(tempoDescanso.startsWith("00")){
+                    tempoDescanso = tempoDescanso.substring(3);
+                }
+
+                timerPrincipalLabel.setText(tempoEstudo);
+                timerNextLabel.setText(tempoDescanso);
+            }
+        }
+    }
 
     public void closeProgram(ActionEvent event){
 
