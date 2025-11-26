@@ -1,0 +1,27 @@
+.shopScreen {
+    -fx-alignment: center;
+}
+
+.item {
+    -fx-padding: 10px
+}
+
+.itemNome {
+    -fx-font-size: 20px;
+    -fx-text-fill: #FBF6F2;
+    -fx-alignment: center;
+}
+
+.itemBtnComprar {
+    -fx-font-size: 20px;
+    -fx-text-fill: #BF8449;
+    -fx-background-color: #FBF6F2;
+    -fx-padding: 10px 25px;
+
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.itemBtnComprar:hover {
+    -fx-background-color: #e4deda;
+}

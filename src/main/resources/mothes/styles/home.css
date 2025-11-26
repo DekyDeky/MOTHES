@@ -51,10 +51,25 @@
     -fx-background-color: #e4deda;
 }
 
-.menuBtn {
+.menuTopBtn {
     -fx-background-color: #BF8449;
 }
 
-.menuBtn:hover {
-    -fx-background-color: #f3a455;
+.menuTopBtn:hover {
+    -fx-background-color: #ECB37A;
+}
+
+/* Lojinha Acessórios */
+.moneyLabel {
+    -fx-font-size: 20px;
+    -fx-text-fill: #FBF6F2;
+    -fx-font-weight: bold;
+
+    -fx-border-color: transparent transparent #FBF6F2 transparent;
+    -fx-border-width: 0 0 2px 0;
+    -fx-border-style: solid;
+}
+
+.StudiesComboBox {
+    -fx-background-color: #ECB37A;
 }

@@ -36,9 +36,6 @@ public class LocalStorage {
         File file = new File(path);
 
         if(!file.exists()) {
-            new Alert(Alert.AlertType.ERROR,
-                    "Falha ao carregar os dados locais do usuário. Arquivo inexistente."
-            ).showAndWait();
             return null;
         }
 
