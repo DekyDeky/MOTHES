@@ -14,23 +14,23 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="homePane" prefHeight="471.0" prefWidth="857.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mothes.controllers.HomeController">
+<AnchorPane fx:id="homePane" prefHeight="495.0" prefWidth="857.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mothes.controllers.HomeController">
    <children>
-      <Pane layoutX="17.0" layoutY="11.0" prefHeight="450.0" prefWidth="500.0">
+      <Pane layoutX="17.0" layoutY="11.0" prefHeight="472.0" prefWidth="500.0">
          <children>
             <ImageView fx:id="mothImage" fitHeight="357.0" fitWidth="436.0" layoutX="72.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@assets/ph_moth.png" />
                </image>
             </ImageView>
-            <Pane layoutX="25.0" layoutY="349.0" prefHeight="91.0" prefWidth="463.0" styleClass="footerPane">
+            <Pane layoutX="25.0" layoutY="336.0" prefHeight="128.0" prefWidth="463.0" styleClass="footerPane">
                <children>
-                  <Button fx:id="beginBtn" layoutX="231.0" layoutY="49.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="209.0" styleClass="beginBtn" text="INICIAR">
+                  <Button fx:id="beginBtn" layoutX="236.0" layoutY="84.0" mnemonicParsing="false" onAction="#iniciarPomodoro" prefHeight="30.0" prefWidth="102.0" styleClass="beginBtn" text="INICIAR">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Button>
-                  <Pane layoutX="14.0" layoutY="19.0" prefHeight="60.0" prefWidth="209.0" styleClass="timeContainer">
+                  <Pane layoutX="19.0" layoutY="54.0" prefHeight="60.0" prefWidth="209.0" styleClass="timeContainer">
                      <children>
                         <Label fx:id="timerPrincipalLabel" alignment="CENTER" contentDisplay="CENTER" layoutY="-10.0" prefHeight="60.0" prefWidth="209.0" styleClass="timerPrincipal" text="00:00">
                            <font>
@@ -44,7 +44,36 @@
                         </Label>
                      </children>
                   </Pane>
-                  <ComboBox fx:id="studiesComboBox" layoutX="231.0" layoutY="19.0" onAction="#onComboChange" prefHeight="25.0" prefWidth="209.0" styleClass="StudiesComboBox" />
+                  <ComboBox fx:id="studiesComboBox" layoutX="236.0" layoutY="54.0" onAction="#onComboChange" prefHeight="25.0" prefWidth="209.0" styleClass="StudiesComboBox" />
+                  <Button fx:id="stopBtn" layoutX="403.0" layoutY="84.0" mnemonicParsing="false" onAction="#pararPomodoro" prefHeight="30.0" prefWidth="42.0" styleClass="beginBtn">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@assets/stop.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="pausePlayBtn" layoutX="350.0" layoutY="84.0" mnemonicParsing="false" onAction="#pausarPomodoro" prefHeight="30.0" prefWidth="42.0" styleClass="beginBtn">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@assets/playPause.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Label fx:id="mothNameLabel" layoutX="187.0" layoutY="14.0" text="Mariposa">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
                </children>
             </Pane>
             <Button fx:id="showMenuBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="410.0" layoutY="14.0" mnemonicParsing="false" onAction="#showMenu" prefHeight="75.0" prefWidth="75.0" styleClass="menuShowBtn" textAlignment="CENTER">
@@ -58,9 +87,9 @@
             </Button>
          </children>
       </Pane>
-      <Pane fx:id="homeMenuPane" layoutX="543.0" layoutY="11.0" prefHeight="450.0" prefWidth="300.0" style="-fx-border-radius: 10px;">
+      <Pane fx:id="homeMenuPane" layoutX="543.0" layoutY="11.0" prefHeight="472.0" prefWidth="300.0" style="-fx-border-radius: 10px;">
          <children>
-            <Pane fx:id="configPane" layoutY="90.0" prefHeight="360.0" prefWidth="300.0" style="-fx-border-radius: 10px;" styleClass="menu" visible="false">
+            <Pane fx:id="configPane" layoutY="90.0" prefHeight="380.0" prefWidth="300.0" style="-fx-border-radius: 10px;" styleClass="menu" visible="false">
                <children>
                   <Button fx:id="exitBtn" layoutX="81.0" layoutY="281.0" mnemonicParsing="false" onAction="#closeProgram" prefHeight="51.0" prefWidth="139.0" styleClass="menuShowBtn" text="Sair">
                      <font>
@@ -69,12 +98,11 @@
                   </Button>
                </children>
             </Pane>
-            <Pane layoutY="90.0" prefHeight="360.0" prefWidth="300.0" style="-fx-border-radius: 10px;" styleClass="menu" />
-            <Pane fx:id="hatsShopScrollPane" layoutY="93.0" prefHeight="357.0" prefWidth="300.0" styleClass="menu" visible="false">
+            <Pane fx:id="hatsShopScrollPane" layoutY="90.0" prefHeight="380.0" prefWidth="300.0" styleClass="menu" visible="false">
                <children>
                   <ScrollPane prefHeight="357.0" prefWidth="300.0" style="-fx-background-color: #BF8449;" styleClass="menu">
                      <content>
-                        <FlowPane fx:id="hatsShopContentPane" minHeight="342.0" minWidth="278.0" prefHeight="349.0" prefWidth="284.0" style="-fx-background-color: #BF8449;">
+                        <FlowPane fx:id="hatsShopContentPane" alignment="TOP_CENTER" columnHalignment="CENTER" minHeight="342.0" minWidth="278.0" prefHeight="349.0" prefWidth="284.0" style="-fx-background-color: #BF8449;">
                            <styleClass>
                               <String fx:value="menu" />
                               <String fx:value="shopScreen" />
@@ -96,7 +124,7 @@
                   </ScrollPane>
                </children>
             </Pane>
-            <Button fx:id="hatsShopBtn" layoutX="30.0" layoutY="20.0" mnemonicParsing="false" onAction="#showHatsShop" prefHeight="50.0" prefWidth="50.0" styleClass="menuTopBtn">
+            <Button fx:id="hatsShopBtn" layoutX="61.0" layoutY="23.0" mnemonicParsing="false" onAction="#showHatsShop" prefHeight="50.0" prefWidth="50.0" styleClass="menuTopBtn">
                <graphic>
                   <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -105,7 +133,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="furnitureShopBtn" layoutX="94.0" layoutY="20.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="menuTopBtn">
+            <Button fx:id="furnitureShopBtn" layoutX="125.0" layoutY="23.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="menuTopBtn">
                <graphic>
                   <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -114,7 +142,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="timerConfigBtn" layoutX="158.0" layoutY="20.0" mnemonicParsing="false" onAction="#showTimeConfig" prefHeight="50.0" prefWidth="50.0" styleClass="menuTopBtn">
+            <Button fx:id="timerConfigBtn" layoutX="189.0" layoutY="23.0" mnemonicParsing="false" onAction="#showTimeConfig" prefHeight="50.0" prefWidth="50.0" styleClass="menuTopBtn">
                <graphic>
                   <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -123,7 +151,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="configBtn" layoutX="220.0" layoutY="20.0" mnemonicParsing="false" onAction="#showConfig" prefHeight="50.0" prefWidth="50.0" styleClass="menuTopBtn">
+            <Button fx:id="configBtn" layoutX="251.0" layoutY="23.0" mnemonicParsing="false" onAction="#showConfig" prefHeight="50.0" prefWidth="50.0" styleClass="menuTopBtn">
                <graphic>
                   <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -132,13 +160,18 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Pane fx:id="timeConfigPane" layoutY="90.0" prefHeight="360.0" prefWidth="300.0" style="-fx-border-radius: 15px;" styleClass="menu">
+            <Pane fx:id="timeConfigPane" layoutY="90.0" prefHeight="380.0" prefWidth="300.0" styleClass="menu" visible="false">
                <children>
-                  <ScrollPane prefHeight="360.0" prefWidth="300.0" style="-fx-background-color: #BF8449;" styleClass="menu">
+                  <ScrollPane fx:id="allStudiesScrollPane" layoutY="56.0" pannable="true" prefHeight="326.0" prefWidth="300.0">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="453.0" prefWidth="271.0" style="-fx-background-color: #BF8449;" styleClass="menu">
+                      <AnchorPane minHeight="302.0" minWidth="0.0" prefHeight="313.0" prefWidth="284.0" style="-fx-background-color: #BF8449;" />
+                    </content>
+                  </ScrollPane>
+                  <ScrollPane fx:id="timeCreatePane" layoutY="56.0" prefHeight="326.0" prefWidth="300.0" style="-fx-background-color: #BF8449;" styleClass="menu">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="474.0" prefWidth="271.0" style="-fx-background-color: #BF8449;" styleClass="menu">
                            <children>
-                              <Button fx:id="saveStudyBtn" layoutX="20.0" layoutY="388.0" mnemonicParsing="false" onAction="#createEstudo" prefHeight="50.0" prefWidth="224.0" styleClass="menuShowBtn" text="Salvar">
+                              <Button fx:id="saveStudyBtn" layoutX="20.0" layoutY="401.0" mnemonicParsing="false" onAction="#createEstudo" prefHeight="50.0" prefWidth="224.0" styleClass="menuShowBtn" text="Salvar" wrapText="true">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
@@ -223,13 +256,60 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="timerErroLabel" alignment="CENTER" contentDisplay="CENTER" layoutY="363.0" prefHeight="17.0" prefWidth="273.0" style="-fx-text-fill: #B22222;" />
+                              <Label fx:id="timerErroLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="-2.0" layoutY="357.0" prefHeight="44.0" prefWidth="273.0" style="-fx-text-fill: #B22222;" textAlignment="CENTER" wrapText="true" />
                            </children>
                         </AnchorPane>
                     </content>
                   </ScrollPane>
+                  <Pane layoutX="18.0" prefHeight="51.0" prefWidth="265.0">
+                     <children>
+                        <Button fx:id="allStudiesBtn" layoutX="16.0" layoutY="7.0" mnemonicParsing="false" onAction="#showAllStudies" prefHeight="38.0" prefWidth="111.0" styleClass="beginBtn" text="Estudos" />
+                        <Button fx:id="createStudyBtn" layoutX="139.0" layoutY="7.0" mnemonicParsing="false" onAction="#showCreateStudy" prefHeight="38.0" prefWidth="111.0" styleClass="beginBtn" text="Adicionar" />
+                     </children>
+                     <styleClass>
+                        <String fx:value="menu" />
+                        <String fx:value="studiesHeader" />
+                     </styleClass>
+                  </Pane>
                </children>
             </Pane>
+            <Pane fx:id="infoStagePane" layoutY="90.0" prefHeight="380.0" prefWidth="300.0" style="-fx-border-radius: 10px;" styleClass="menu">
+               <children>
+                  <Label fx:id="actualStageLabel" layoutX="14.0" layoutY="24.0" prefHeight="27.0" prefWidth="273.0" styleClass="timerPrincipal" text="Estágio Atual: ">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="nextStageLabel" layoutX="14.0" layoutY="51.0" prefHeight="60.0" prefWidth="273.0" styleClass="timerPrincipal" text="Quantidade Necessária para o próximo nível:" wrapText="true">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="nectarQuantityLabel" alignment="TOP_LEFT" layoutX="14.0" layoutY="117.0" prefHeight="60.0" prefWidth="273.0" styleClass="timerPrincipal" text="Quantidade de Nectar Atual:" wrapText="true">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="feedMothBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="60.0" layoutY="210.0" mnemonicParsing="false" text="Alimentar Mariposa" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Label fx:id="stageErrorLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="13.0" layoutY="177.0" prefHeight="27.0" prefWidth="273.0" style="-fx-text-fill: #B22222;" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children></Pane>
+            <Button fx:id="infoStageBtn" layoutX="-2.0" layoutY="23.0" mnemonicParsing="false" onAction="#showInfoMoth" prefHeight="50.0" prefWidth="50.0" styleClass="menuTopBtn">
+               <graphic>
+                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/mel.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
       </Pane>
    </children>

@@ -14,9 +14,10 @@ import java.util.List;
 
 public class EstudoDAO {
 
-    public static void createEstudo(Estudo estudo, int idUsuario){
+    public static boolean createEstudo(Estudo estudo, int idUsuario){
         Connection con = Conexao.getConexao();
         PreparedStatement stmt = null;
+        boolean estudoIsCreated = false;
 
         try {
             String query = "INSERT INTO estudo(nome, ciclos, tempoEstudo, tempoDescanso, idUsuario) VALUES (?, ?, ?, ?, ?)";
@@ -24,8 +25,8 @@ public class EstudoDAO {
             stmt = con.prepareStatement(query);
             stmt.setString(1, estudo.getNome());
             stmt.setInt(2, estudo.getCiclos());
-            stmt.setTime(3, estudo.getTempoEstudo());
-            stmt.setTime(4, estudo.getTempoDescanso());
+            stmt.setInt(3, estudo.getTempoEstudo());
+            stmt.setInt(4, estudo.getTempoDescanso());
             stmt.setInt(5, idUsuario);
 
             stmt.executeUpdate();
@@ -34,13 +35,18 @@ public class EstudoDAO {
                     "Estudo cadastrado com sucesso!"
             ).showAndWait();
 
+            estudoIsCreated = true;
+
         } catch (SQLException ex) {
             new Alert(Alert.AlertType.ERROR,
                     "Falha ao cadastrar estudo.\nErro: " + ex.getMessage()
             ).showAndWait();
+            estudoIsCreated = false;
         } finally {
             Conexao.fecharConexao(con, stmt);
         }
+
+        return estudoIsCreated;
     }
 
 
@@ -64,8 +70,8 @@ public class EstudoDAO {
                 estudo.setIdEstudo(rs.getInt("idEstudo"));
                 estudo.setNome(rs.getString("nome"));
                 estudo.setCiclos(rs.getInt("ciclos"));
-                estudo.setTempoEstudo(rs.getTime("tempoEstudo"));
-                estudo.setTempoDescanso(rs.getTime("tempoDescanso"));
+                estudo.setTempoEstudo(rs.getInt("tempoEstudo"));
+                estudo.setTempoDescanso(rs.getInt("tempoDescanso"));
 
                 estudos.add(estudo);
 

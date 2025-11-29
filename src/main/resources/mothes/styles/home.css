@@ -33,13 +33,14 @@
     -fx-background-radius: 5px;
 }
 
+.beginBtn:hover {
+    -fx-background-color: #f3a455;
+}
+
 .menu {
     -fx-background-color: #BF8449;
 }
 
-.beginBtn:hover {
-    -fx-background-color: #f3a455;
-}
 
 .menuShowBtn {
     -fx-background-color: #FBF6F2;
@@ -72,4 +73,19 @@
 
 .StudiesComboBox {
     -fx-background-color: #ECB37A;
+
+}
+
+.studiesHeader {
+    -fx-border-width: 0 0 2px 0; /* top right bottom left */
+    -fx-border-color: transparent transparent #ECB37A transparent;
+    -fx-border-style: solid;
+}
+
+.selectedButton {
+    -fx-background-color: #ECB37A;
+}
+
+.selectedAltButton {
+    -fx-background-color: #f3a455;
 }

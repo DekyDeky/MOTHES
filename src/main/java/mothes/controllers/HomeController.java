@@ -1,58 +1,72 @@
 package mothes.controllers;
 
-import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import mothes.model.bean.Acessorio;
 import mothes.model.bean.Estudo;
 import mothes.model.bean.Mariposa;
 import mothes.model.bean.Usuario;
 import mothes.model.dao.EstudoDAO;
-import mothes.util.Converter;
-import mothes.util.LocalStorage;
-import mothes.util.Validation;
+import mothes.util.*;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 public class HomeController {
 
-    @FXML private AnchorPane homePane;
+    @FXML private AnchorPane homePane; //Tela total
+
+    //Sessão Timer
+    @FXML private Label mothNameLabel;
     @FXML private ComboBox<String> studiesComboBox;
     @FXML private Label timerPrincipalLabel;
     @FXML private Label timerNextLabel;
+    private ObservableList<String> options = FXCollections.observableArrayList();
 
-    @FXML private Pane homeMenuPane;
+    @FXML private Pane homeMenuPane; //Tela de Menus
 
+    //Classe de menus principais e sub-menus
+    private PaneManagement allPanes;
+    private PaneManagement studyPanes;
+
+    //Todos os Menus
     @FXML private Pane timeConfigPane;
     @FXML private Pane configPane;
     @FXML private Pane furnitureShopMenu;
     @FXML private Pane hatsShopScrollPane;
     @FXML private FlowPane hatsShopContentPane;
+    @FXML private Pane infoStagePane;
 
+    //Botão de acesso dos menus
     @FXML private Button hatsShopBtn;
     @FXML private Button furnitureShopBtn;
     @FXML private Button timerConfigBtn;
     @FXML private Button configBtn;
+    @FXML private Button infoStageBtn;
+    private List<Button> navButtons; //Lista com todos os botões do nav
 
+    //Sub-menus de timeConfig
+    @FXML private ScrollPane allStudiesScrollPane;
+    @FXML private ScrollPane timeCreatePane;
+    @FXML private Button allStudiesBtn;
+    @FXML private Button createStudyBtn;
+
+    //Elementos da tela createStudy de timeConfig
     @FXML private TextField titleStudyTextField;
     @FXML private TextField restHourTextField;
     @FXML private TextField restMinTextField;
@@ -62,22 +76,63 @@ public class HomeController {
     @FXML private TextField workSecTextField;
     @FXML private TextField cyclesStudyTextField;
     @FXML private Label timerErroLabel;
-    @FXML private Button saveStudyBtn;
 
-
+    //Elementos da loja
     @FXML private Label moneyLabel;
 
+    //Info Moth Labels
+    @FXML private Label actualStageLabel;
+    @FXML private Label nextStageLabel;
+    @FXML private Label nectarQuantityLabel;
+    @FXML private Label stageErrorLabel;
+    @FXML private Button feedMothBtn;
+
+    //Dados da sessão atual
     private Usuario sessaoAtual = LocalStorage.loadUser();
+    private Mariposa mariposa = LocalStorage.loadMariposa();
     private List<Estudo> estudos;
 
-    ArrayList<Acessorio> acessorios = new ArrayList<>();
+    private Estudo estudoAtual; // Estudo selecionado atual
+    private Temporizador temporizador; //Temporizador do usuário
+
+    private ArrayList<Acessorio> acessorios = new ArrayList<>(); //debug teste
+
 
     Stage stage;
 
+    // Inicializador
     public void initialize() throws IOException, SQLException {
-        estudos = EstudoDAO.getEstudoByUsuarioID(sessaoAtual.getId());
+        navButtons = List.of(
+            timerConfigBtn, hatsShopBtn, /*furnitureShopBtn,*/ configBtn, infoStageBtn
+        );
 
-        ObservableList<String> options = FXCollections.observableArrayList();
+        List<Node> menuPanes = List.of(
+                timeConfigPane, configPane, /*furnitureShopMenu,*/ hatsShopScrollPane, infoStagePane
+        );
+
+        List<Node> studyMenuPanes = List.of(
+                allStudiesScrollPane,
+                timeCreatePane
+        );
+
+        allPanes = new PaneManagement(navButtons, menuPanes);
+
+        studyPanes = new PaneManagement(
+                List.of(allStudiesBtn, createStudyBtn),
+                studyMenuPanes
+        );
+
+        for (Node pane : menuPanes) {
+            pane.setManaged(false);
+            pane.setVisible(false);
+        }
+
+        for (Node pane : studyMenuPanes) {
+            pane.setManaged(false);
+            pane.setVisible(false);
+        }
+
+        estudos = EstudoDAO.getEstudoByUsuarioID(sessaoAtual.getId());
 
         for (Estudo e : estudos) {
             options.add(e.getNome());
@@ -87,12 +142,16 @@ public class HomeController {
 
         loadItems();
 
-        hatsShopBtn.setCursor(Cursor.HAND);
-        furnitureShopBtn.setCursor(Cursor.HAND);
-        timerConfigBtn.setCursor(Cursor.HAND);
-        configBtn.setCursor(Cursor.HAND);
+        for(Button btn : navButtons){
+            btn.setCursor(Cursor.HAND);
+        }
 
         moneyLabel.setText("$ " + sessaoAtual.getQntMoeda());
+
+        actualStageLabel.setText("Estágio Atual: " + mariposa.getEstagio());
+        mothNameLabel.setText(mariposa.getNome());
+
+        allPanes.actualPane(timeConfigPane);
     }
 
     private void loadItems() throws IOException {
@@ -116,84 +175,126 @@ public class HomeController {
         homeMenuPane.setVisible(!homeMenuPane.isVisible());
     }
 
-    public void bringToFront(Pane pane){
-        pane.toFront();
-        pane.setVisible(true);
+    public void showTimeConfig(){
+        allPanes.actualPane(timeConfigPane);
+        allPanes.selectNavButton(timerConfigBtn, false);
+
+        // Submenu inicial dentro do timeConfigPane
+        studyPanes.actualPane(allStudiesScrollPane);
+        studyPanes.selectNavButton(allStudiesBtn, true);
+
+//        bringToFront(timeConfigPane);
+//        selectNavButton(timerConfigBtn);
     }
 
-    public void showTimeConfig(){
-        bringToFront(timeConfigPane);
+    public void showConfig(){
+        allPanes.actualPane(configPane);
+        allPanes.selectNavButton(configBtn, false);
+//        bringToFront(configPane);
+//        selectNavButton(configBtn);
     }
-    public void showConfig(){ bringToFront(configPane); }
-    public void showHatsShop(){bringToFront(hatsShopScrollPane);}
-    //public void showFunirtureShop(){bringToFront(furnitureShopMenu);}
+
+    public void showHatsShop(){
+        allPanes.actualPane(hatsShopScrollPane);
+        allPanes.selectNavButton(hatsShopBtn, false);
+//        bringToFront(hatsShopScrollPane);
+//        selectNavButton(hatsShopBtn);
+    }
+
+    //public void showFunirtureShop(){
+    // bringToFront(furnitureShopMenu);
+    // selectNavButton(furnitureShopBtn);
+    // }
+
+    public void showAllStudies(){
+        studyPanes.actualPane(allStudiesScrollPane);
+        studyPanes.selectNavButton(allStudiesBtn, true);
+//        bringToFront(allStudiesScrollPane);
+//        allStudiesBtn.getStyleClass().add("selectedAltButton");
+//        createStudyBtn.getStyleClass().remove("selectedAltButton");
+    }
+
+    public void showCreateStudy(){
+        studyPanes.actualPane(timeCreatePane);
+        studyPanes.selectNavButton(createStudyBtn, true);
+//        bringToFront(timeCreatePane);
+//        allStudiesBtn.getStyleClass().remove("selectedAltButton");
+//        createStudyBtn.getStyleClass().add("selectedAltButton");
+    }
+
+    public void showInfoMoth(){
+        allPanes.actualPane(infoStagePane);
+        allPanes.selectNavButton(infoStageBtn, false);
+    }
 
     public void createEstudo() throws ParseException {
-        String estudoNome = titleStudyTextField.getText().trim();
+         String[] numberStrFields = {
+                workHourTextField.getText().trim(), workMinTextField.getText().trim(), workSecTextField.getText().trim(),
+                restHourTextField.getText().trim(), restMinTextField.getText().trim(), restSecTextField.getText().trim(),
+                cyclesStudyTextField.getText().trim()
+         };
 
-        String horaTrabStr = workHourTextField.getText().trim();
-        String minTrabStr = workMinTextField.getText().trim();
-        String secTrabStr = workSecTextField.getText().trim();
+        System.out.println(numberStrFields[0]);
 
-        String horaDescStr = restHourTextField.getText().trim();
-        String minDescStr = restMinTextField.getText().trim();
-        String secDescStr = restSecTextField.getText().trim();
+        Estudo newEstudo = Validar.validateNewStudy(numberStrFields, titleStudyTextField.getText().trim(), timerErroLabel);
 
-        String cyclesStr = cyclesStudyTextField.getText().trim();
+        if(newEstudo != null){
+            
+            newEstudo.createEstudo(
+                    sessaoAtual, estudos,
+                    options, studiesComboBox
+            );
 
-        String[] numberStrFields = {horaTrabStr, minTrabStr, secTrabStr, horaDescStr, minDescStr, secDescStr, cyclesStr};
-
-        if(horaTrabStr.isEmpty()){
-            horaTrabStr = "00";
-        }
-
-        if(horaDescStr.isEmpty()){
-            horaDescStr = "00";
-        }
-
-        for(String str : numberStrFields) {
-            if(!Validation.isNumeric(str)){
-                timerErroLabel.setText("Campo numérico inválido!");
-                return;
-            }
-        }
-
-        if(estudoNome.isEmpty()){
-            timerErroLabel.setText("O título é obrigatório");
-            return;
-        }
-
-
-        Estudo newEstudo = new Estudo(
-                estudoNome,
-                Integer.parseInt(cyclesStr),
-                Converter.StrToSQLTime(horaTrabStr, minTrabStr, secTrabStr),
-                Converter.StrToSQLTime(horaDescStr, minDescStr, secDescStr)
-        );
-
-        EstudoDAO.createEstudo(newEstudo, sessaoAtual.getId());
-
+            titleStudyTextField.setText("");
+            workHourTextField.setText("");
+            workMinTextField.setText("");
+            workSecTextField.setText("");
+            restHourTextField.setText("");
+            restMinTextField.setText("");
+            restSecTextField.setText("");
+            restSecTextField.setText("");
+            cyclesStudyTextField.setText("");
+        };
     }
 
     public void onComboChange(ActionEvent event){
-        for(Estudo estudo : estudos) {
-            if(Objects.equals(studiesComboBox.getValue(), estudo.getNome())){
+        if(!estudos.isEmpty()){
+            for(Estudo estudo : estudos) {
+                if(Objects.equals(studiesComboBox.getValue(), estudo.getNome())){
 
-                String tempoEstudo = estudo.getTempoEstudo().toString();
-                String tempoDescanso = estudo.getTempoDescanso().toString();
+                    this.estudoAtual = estudo;
 
-                if(tempoEstudo.startsWith("00")){
-                    tempoEstudo = tempoEstudo.substring(3);
+                    String tempoEstudo = Converter.IntTimeToStrTime(estudo.getTempoEstudo());
+                    String tempoDescanso = Converter.IntTimeToStrTime(estudo.getTempoDescanso());
+
+                    timerPrincipalLabel.setText(tempoEstudo);
+                    timerNextLabel.setText(tempoDescanso);
+
                 }
-
-                if(tempoDescanso.startsWith("00")){
-                    tempoDescanso = tempoDescanso.substring(3);
-                }
-
-                timerPrincipalLabel.setText(tempoEstudo);
-                timerNextLabel.setText(tempoDescanso);
             }
         }
+    }
+
+    public void iniciarPomodoro(){
+
+        temporizador = new Temporizador(
+                this.estudoAtual.getCiclos(),
+                this.estudoAtual.getTempoEstudo(),
+                this.estudoAtual.getTempoDescanso(),
+                timerPrincipalLabel,
+                timerNextLabel
+        );
+
+        temporizador.iniciarTemporizador();
+
+    }
+
+    public void pararPomodoro(){
+        temporizador.parar();
+    }
+
+    public void pausarPomodoro(){
+        temporizador.pausar();
     }
 
     public void closeProgram(ActionEvent event){
@@ -209,6 +310,5 @@ public class HomeController {
         }
 
     }
-
 
 }
