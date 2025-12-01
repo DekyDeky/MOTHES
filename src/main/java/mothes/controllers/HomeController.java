@@ -54,14 +54,14 @@ public class HomeController {
     //Todos os Menus
     @FXML private Pane timeConfigPane;
     @FXML private Pane configPane;
-    @FXML private Pane furnitureShopMenu;
+    @FXML private Pane decoShopMenu;
     @FXML private Pane hatsShopScrollPane;
     @FXML private FlowPane hatsShopContentPane;
     @FXML private Pane infoStagePane;
 
     //Botão de acesso dos menus
     @FXML private Button hatsShopBtn;
-    @FXML private Button furnitureShopBtn;
+    @FXML private Button decoShopBtn;
     @FXML private Button timerConfigBtn;
     @FXML private Button configBtn;
     @FXML private Button infoStageBtn;
@@ -127,13 +127,14 @@ public class HomeController {
         sessaoAtual.setMoneyLabel(moneyLabel);
         mariposa.setNectarQuantityLabel(nectarQuantityLabel);
         nextStageLabel.setText("Quantidade Necessária para o próximo nível: " + mariposa.getPrecoEstagio());
+        estudos = EstudoDAO.getEstudoByUsuarioID(sessaoAtual.getId());
 
         navButtons = List.of(
-            timerConfigBtn, hatsShopBtn, /*furnitureShopBtn,*/ configBtn, infoStageBtn
+            timerConfigBtn, hatsShopBtn, decoShopBtn, configBtn, infoStageBtn
         );
 
         List<Node> menuPanes = List.of(
-                timeConfigPane, configPane, /*furnitureShopMenu,*/ hatsShopScrollPane, infoStagePane
+                timeConfigPane, configPane, decoShopMenu, hatsShopScrollPane, infoStagePane
         );
 
         List<Node> studyMenuPanes = List.of(
@@ -149,6 +150,9 @@ public class HomeController {
                 studyMenuPanes
         );
 
+        loadEstudos();
+        loadAcessories();
+
         for (Node pane : menuPanes) {
             pane.setManaged(false);
             pane.setVisible(false);
@@ -158,11 +162,6 @@ public class HomeController {
             pane.setManaged(false);
             pane.setVisible(false);
         }
-
-        estudos = EstudoDAO.getEstudoByUsuarioID(sessaoAtual.getId());
-
-        loadEstudos();
-        loadItems();
 
         for(Button btn : navButtons){
             btn.setCursor(Cursor.HAND);
@@ -176,7 +175,7 @@ public class HomeController {
         showTimeConfig();
     }
 
-    private void loadItems() throws IOException, SQLException {
+    private void loadAcessories() throws IOException, SQLException {
 
         acessorios = CosmeticoDao.getAcessorios(sessaoAtual);
 
@@ -232,6 +231,11 @@ public class HomeController {
     public void showHatsShop(){
         allPanes.actualPane(hatsShopScrollPane);
         allPanes.selectNavButton(hatsShopBtn, false);
+    }
+
+    public void showDecoShop(){
+        allPanes.actualPane(decoShopMenu);
+        allPanes.selectNavButton(decoShopBtn, false);
     }
 
     public void showAllStudies(){

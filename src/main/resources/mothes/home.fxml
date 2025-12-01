@@ -91,6 +91,30 @@
       </Pane>
       <Pane fx:id="homeMenuPane" layoutX="543.0" layoutY="11.0" prefHeight="472.0" prefWidth="300.0" style="-fx-border-radius: 10px; -fx-background-radius: 10px;">
          <children>
+            <Pane fx:id="decoShopMenu" layoutY="90.0" prefHeight="380.0" prefWidth="300.0" style="-fx-background-radius: 10px;" styleClass="menu">
+               <children>
+                  <ScrollPane prefHeight="380.0" prefWidth="300.0" style="-fx-background-color: #BF8449;" styleClass="menu">
+                     <content>
+                        <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" minHeight="380.0" prefHeight="450.0" prefWidth="278.0">
+                           <children>
+                              <Label fx:id="moneyLabel" alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="20.0" prefWidth="275.0" styleClass="moneyLabel" text="\$ 0">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets right="25.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                           <styleClass>
+                              <String fx:value="shopScreen" />
+                              <String fx:value="menu" />
+                           </styleClass>
+                        </FlowPane>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </Pane>
             <Pane fx:id="configPane" layoutY="90.0" prefHeight="380.0" prefWidth="300.0" style="-fx-background-radius: 10px;" styleClass="menu" visible="false">
                <children>
                   <Button fx:id="exitBtn" layoutX="81.0" layoutY="281.0" mnemonicParsing="false" onAction="#closeProgram" prefHeight="51.0" prefWidth="139.0" styleClass="menuShowBtn" text="Sair">
@@ -104,13 +128,13 @@
                <children>
                   <ScrollPane prefHeight="380.0" prefWidth="300.0" style="-fx-background-color: #BF8449;" styleClass="menu">
                      <content>
-                        <FlowPane fx:id="hatsShopContentPane" alignment="TOP_CENTER" columnHalignment="CENTER" minHeight="342.0" minWidth="278.0" prefHeight="462.0" prefWidth="278.0" style="-fx-background-color: #BF8449;">
+                        <FlowPane fx:id="hatsShopContentPane" alignment="TOP_CENTER" columnHalignment="CENTER" minHeight="342.0" prefHeight="462.0" prefWidth="278.0" style="-fx-background-color: #BF8449;">
                            <styleClass>
                               <String fx:value="menu" />
                               <String fx:value="shopScreen" />
                            </styleClass>
                            <children>
-                              <Label fx:id="moneyLabel" alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="17.0" prefWidth="274.0" styleClass="moneyLabel" text="\$ 0" textAlignment="CENTER">
+                              <Label fx:id="moneyLabel" alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="20.0" prefWidth="275.0" styleClass="moneyLabel" text="\\$ 0" textAlignment="CENTER">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -136,7 +160,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="furnitureShopBtn" layoutX="125.0" layoutY="23.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" styleClass="menuTopBtn">
+            <Button fx:id="decoShopBtn" layoutX="125.0" layoutY="23.0" mnemonicParsing="false" onAction="#showDecoShop" prefHeight="50.0" prefWidth="50.0" styleClass="menuTopBtn">
                <graphic>
                   <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -197,7 +221,7 @@
                   </Label>
                </children>
             </Pane>
-            <Pane fx:id="timeConfigPane" layoutY="90.0" prefHeight="380.0" prefWidth="300.0" style="-fx-background-radius: 10px;" styleClass="menu">
+            <Pane fx:id="timeConfigPane" layoutY="90.0" prefHeight="380.0" prefWidth="300.0" style="-fx-background-radius: 10px;" styleClass="menu" visible="false">
                <children>
                   <ScrollPane fx:id="allStudiesScrollPane" layoutY="50.0" pannable="true" prefHeight="330.0" prefWidth="300.0" styleClass="menu">
                      <content>
