@@ -125,4 +125,27 @@ public class UsuarioDAO {
         return userInfo;
     }
 
+    public static boolean updateUser(Usuario usuario) {
+        Connection con = Conexao.getConexao();
+        PreparedStatement stmt = null;
+
+        try {
+            String query = "UPDATE usuarios SET qntMoeda = ? WHERE idUsuario = ?";
+            stmt = con.prepareStatement(query);
+            stmt.setInt(1, usuario.getQntMoeda());
+            stmt.setInt(2, usuario.getId());
+
+            stmt.executeUpdate();
+
+            return true;
+        } catch (SQLException ex) {
+            new Alert(Alert.AlertType.ERROR,
+                    "Erro ao atualizar banco de dados.\nErro: " + ex.getMessage()
+            ).showAndWait();
+            return false;
+        } finally {
+            Conexao.fecharConexao(con, stmt);
+        }
+    }
+
 }

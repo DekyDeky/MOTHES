@@ -82,6 +82,12 @@ public class Estudo {
             studiesComboBox.setItems(options);
         }
 
+    }
 
+    public void editEstudo(String nome, int ciclos, int tempoEstudo, int tempoDescanso) {
+        this.nome = nome;
+        this.ciclos = ciclos;
+        this.tempoEstudo = tempoEstudo;
+        this.tempoDescanso = tempoDescanso;
     }
 }

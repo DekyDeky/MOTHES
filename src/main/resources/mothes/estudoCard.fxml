@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox alignment="CENTER" prefHeight="100.0" prefWidth="275.0" spacing="25" styleClass="estudoCard" stylesheets="@styles/estudoCard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mothes.controllers.EstudoCardController">
+
+    <VBox alignment="center_left">
+        <Label fx:id="estudoNome" styleClass="estudoTitulo" text="Lorem Ipsum" />
+        <Label fx:id="estudoTempo" styleClass="estudoItem" text="Estudar por: 99:99:99" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+        <Label fx:id="estudoDescancoTempo" styleClass="estudoItem" text="Descançar por: 99:99:99" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+        <Label fx:id="estudoCiclos" styleClass="estudoItem" text="Repetir por: 9" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+    </VBox>
+
+
+    <VBox alignment="center_right" spacing="10">
+        <Button fx:id="estudoEditar" onAction="#editEstudo" prefWidth="75" styleClass="estudoBtn" text="Editar" />
+        <Button fx:id="estudoExcluir" onAction="#deleteEstudo" prefWidth="75" styleClass="estudoDangerBtn" text="Excluir" />
+    </VBox>
+
+</HBox>

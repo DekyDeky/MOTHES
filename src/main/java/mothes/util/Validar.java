@@ -36,6 +36,21 @@ public class Validar {
         return nullValue;
     }
 
+    public static String validateNumberStrFields(
+            String numberStr
+    ) {
+
+        if(numberStr.isEmpty()){
+            numberStr = "0";
+        }
+
+        if(!isInt(numberStr)){
+            return null;
+        }
+
+        return numberStr;
+    }
+
     public static Estudo validateNewStudy(
             String[] numberStrFields,
             String estudoNome,
@@ -44,12 +59,12 @@ public class Validar {
         boolean haveErrors = false;
         String errorLabel = "";
 
-        for(String str : numberStrFields) {
-            if(str.isEmpty()){
-                str = "0";
+        for(int i = 0; i < numberStrFields.length; i++) {
+            if (numberStrFields[i].isEmpty()) {
+                numberStrFields[i] = "0"; // Altera diretamente o array
             }
 
-            if (!Validar.isInt(str)) {
+            if (!Validar.isInt(numberStrFields[i])) {
                 haveErrors = true;
                 errorLabel = "Campo numérico inválido";
                 break;

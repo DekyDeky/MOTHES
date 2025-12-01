@@ -3,6 +3,8 @@ package mothes.model.bean;
 public class Acessorio extends Cosmetico {
     private String tipo;
 
+    public Acessorio(){}
+
     public Acessorio(String tipo) {
         this.tipo = tipo;
     }

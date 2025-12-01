@@ -63,6 +63,8 @@ public class HelloController {
         String senhaLoginHash = PasswordHash.hashPassword(senha, salt);
 
         if(senhaHash.equals(senhaLoginHash)){
+            loginErrorLabel.setText("");
+
             Mariposa mariposa = MariposaDAO.getMariposaByUsuarioID(loginUser.getId());
             if(mariposa == null){
                 return false;

@@ -89,4 +89,62 @@ public class EstudoDAO {
 
     }
 
+    public static boolean editEstudo(
+            String novoNome,
+            int novoCiclo,
+            int novoTempoEstudo,
+            int novoTempoDescanco,
+            int idEstudo
+    ) throws  SQLException {
+        Connection con = Conexao.getConexao();
+        PreparedStatement stmt = null;
+        boolean success = false;
+
+        try {
+            String query = "UPDATE estudo SET nome = ?, ciclos = ?, tempoEstudo = ?, tempoDescanso =? WHERE idEstudo = ?";
+            stmt = con.prepareStatement(query);
+            stmt.setString(1, novoNome);
+            stmt.setInt(2, novoCiclo);
+            stmt.setInt(3, novoTempoEstudo);
+            stmt.setInt(4, novoTempoDescanco);
+            stmt.setInt(5, idEstudo);
+
+            stmt.executeUpdate();
+
+            success = true;
+        } catch (SQLException ex) {
+            new Alert(Alert.AlertType.ERROR,
+                    "Erro ao editar estudo no banco de dados.\nErro: " + ex.getMessage()
+            ).showAndWait();
+        } finally {
+            Conexao.fecharConexao(con, stmt);
+        }
+
+        return success;
+    }
+
+    public static void deleteEstudo(Estudo estudo) throws SQLException {
+        Connection con = Conexao.getConexao();
+        PreparedStatement stmt = null;
+
+        try {
+            String query = "DELETE FROM estudo WHERE idEstudo = ?";
+            stmt = con.prepareStatement(query);
+            stmt.setInt(1, estudo.getIdEstudo());
+
+            stmt.executeUpdate();
+
+            new Alert(Alert.AlertType.INFORMATION,
+                    "Estudo deletado com sucesso!"
+            ).showAndWait();
+
+        } catch (SQLException ex) {
+            new Alert(Alert.AlertType.ERROR,
+                    "Erro ao deletar estudo o banco de dados.\nErro: " + ex.getMessage()
+            ).showAndWait();
+        } finally {
+            Conexao.fecharConexao(con, stmt);
+        }
+    }
+
 }

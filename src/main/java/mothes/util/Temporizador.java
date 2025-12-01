@@ -6,6 +6,9 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
+import mothes.model.bean.Mariposa;
+import mothes.model.bean.Recompensas;
+import mothes.model.bean.Usuario;
 
 import java.util.Objects;
 
@@ -18,13 +21,19 @@ public class Temporizador {
     private Label timerNextLabel;
     private Timeline timeline;
     private boolean isPaused;
+    private Usuario usuario;
+    private Mariposa mariposa;
+    private Recompensas recompensas;
 
-    public Temporizador(int ciclos, int secTrabalho, int secDescanso, Label timerPrincipalLabel, Label timerNextLabel) {
+    public Temporizador(int ciclos, int secTrabalho, int secDescanso, Label timerPrincipalLabel, Label timerNextLabel, Usuario usuario, Mariposa mariposa) {
         this.ciclos = ciclos;
         this.secTrabalho = secTrabalho;
         this.secDescanso = secDescanso;
         this.timerPrincipalLabel = timerPrincipalLabel;
         this.timerNextLabel = timerNextLabel;
+        this.usuario = usuario;
+        this.mariposa = mariposa;
+        recompensas = new Recompensas(usuario, mariposa);
     }
 
     public void iniciarTemporizador(){
@@ -37,7 +46,7 @@ public class Temporizador {
             return;
         }
 
-        System.out.println("Ciclo " + cicloAtual + "iniciado!");
+        System.out.println("Ciclo " + cicloAtual + " iniciado!");
 
         //Recursividade - Ao terminar pomodoro de trabalho -> iniciar pomodoro Descanso -> Mudar Ciclo
         setTemporizador(secTrabalho, "Trabalho", () ->
@@ -58,8 +67,8 @@ public class Temporizador {
 
         timeline = new Timeline(
                 new KeyFrame(Duration.seconds(1), event -> {
+
                     if(tempo.get() >= 0){
-                        System.out.println(tipo + tempo.get());
                         this.timerPrincipalLabel.setText(Converter.IntTimeToStrTime(tempo.get()));
                         tempo.set(tempo.get() - 1);
                     }
@@ -69,7 +78,14 @@ public class Temporizador {
         timeline.setCycleCount(segundos + 1);
 
         timeline.setOnFinished(event -> {
-            System.out.println(tipo + " acabou!");
+
+            if (tipo.equals("Trabalho")) {
+                recompensas.recompensar();
+                usuario.setTotalTrabalho(usuario.getTotalTrabalho() + segundos);
+            } else {
+                usuario.setTotalDescanco(usuario.getTotalDescanco() + segundos);
+            }
+
             onFinish.run();
         });
 

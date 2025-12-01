@@ -1,5 +1,9 @@
 package mothes.model.bean;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.control.Label;
+
 import java.util.Base64;
 
 public class Usuario {
@@ -9,6 +13,10 @@ public class Usuario {
     private String senha;
     private int qntMoeda;
     private String salt64;
+    private long totalTrabalho;
+    private long totalDescanco;
+
+    private transient Label moneyLabel;
 
     public Usuario(){}
 
@@ -66,6 +74,9 @@ public class Usuario {
 
     public void setQntMoeda(int qntMoeda) {
         this.qntMoeda = qntMoeda;
+        if(this.moneyLabel != null){
+            this.moneyLabel.setText("$ " + this.qntMoeda);
+        }
     }
 
     public String getSalt64() {
@@ -74,5 +85,25 @@ public class Usuario {
 
     public void setSalt64(String salt64) {
         this.salt64 = salt64;
+    }
+
+    public long getTotalTrabalho() {
+        return totalTrabalho;
+    }
+
+    public void setTotalTrabalho(long totalTrabalho) {
+        this.totalTrabalho = totalTrabalho;
+    }
+
+    public long getTotalDescanco() {
+        return totalDescanco;
+    }
+
+    public void setTotalDescanco(long totalDescanco) {
+        this.totalDescanco = totalDescanco;
+    }
+
+    public void setMoneyLabel(Label moneyLabel) {
+        this.moneyLabel = moneyLabel;
     }
 }

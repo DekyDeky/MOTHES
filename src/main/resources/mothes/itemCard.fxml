@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
-<VBox stylesheets="@styles/itemCard.css"
-        xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="mothes.controllers.ItemCardController"
-      styleClass="item"
-      spacing="10" alignment="CENTER">
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-    <Label fx:id="itemNome" styleClass="itemNome"/>
+<VBox alignment="CENTER" spacing="10" styleClass="item" stylesheets="@styles/itemCard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mothes.controllers.ItemCardController">
 
-    <ImageView fx:id="itemImg"/>
+    <Label fx:id="itemNome" styleClass="itemNome" />
 
-    <Button fx:id="itemBtnComprar" styleClass="itemBtnComprar"/>
+    <ImageView fx:id="itemImg" />
+
+    <StackPane alignment="CENTER">
+        <Button fx:id="itemBtnComprar" onAction="#comprarItem" styleClass="itemBtnComprar" />
+        <Button fx:id="itemBtnEquipar" onAction="#equiparItem" styleClass="itemBtnComprar" text="equipar" visible="false" />
+    </StackPane>
 
 </VBox>

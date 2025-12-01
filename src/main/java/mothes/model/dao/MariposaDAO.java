@@ -3,6 +3,7 @@ package mothes.model.dao;
 import javafx.scene.control.Alert;
 import mothes.conexao.Conexao;
 import mothes.model.bean.Mariposa;
+import mothes.model.bean.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -76,6 +77,30 @@ public class MariposaDAO {
         }
 
         return mariposa;
+    }
+
+    public static boolean updateMariposa(Mariposa mariposa) {
+        Connection con = Conexao.getConexao();
+        PreparedStatement stmt = null;
+
+        try {
+            String query = "UPDATE mariposa SET estagio = ?, qntNectarReal = ? WHERE idMariposa = ?";
+            stmt = con.prepareStatement(query);
+            stmt.setInt(1, mariposa.getEstagio());
+            stmt.setDouble(2, mariposa.getQntNectar());
+            stmt.setInt(3, mariposa.getIdMariposa());
+
+            stmt.executeUpdate();
+
+            return true;
+        } catch (SQLException ex) {
+            new Alert(Alert.AlertType.ERROR,
+                    "Erro ao atualizar banco de dados.\nErro: " + ex.getMessage()
+            ).showAndWait();
+            return false;
+        } finally {
+            Conexao.fecharConexao(con, stmt);
+        }
     }
 
 }
