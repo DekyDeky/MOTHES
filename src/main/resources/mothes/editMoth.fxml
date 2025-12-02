@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.PasswordField?>
+<VBox
+        alignment="CENTER"
+        prefHeight="300.0" prefWidth="425.0"
+        styleClass="editUser" stylesheets="@styles/editPane.css"
+        xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="mothes.controllers.EditMothController">
+
+    <Label alignment="center" prefWidth="400" styleClass="labels" text="Editar Mariposa">
+        <font>
+            <Font size="24.0" />
+        </font>
+    </Label>
+
+    <VBox alignment="center" fillWidth="false" prefWidth="200">
+        <Label alignment="CENTER_LEFT" prefHeight="25" prefWidth="375" styleClass="labels" text="Senha Antiga">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <PasswordField fx:id="oldSenhaTextField" prefWidth="375">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </PasswordField>
+        <Label fx:id="oldSenhaErrorLabel" alignment="CENTER_LEFT" prefHeight="25" prefWidth="375" styleClass="labels_error" text="">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+    </VBox>
+
+    <VBox alignment="center" fillWidth="false" prefWidth="200">
+        <Label alignment="CENTER_LEFT" prefHeight="25" prefWidth="375" styleClass="labels" text="Novo nome da Mariposa">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <TextField fx:id="nomeMariposaTextField" prefWidth="375">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </TextField>
+        <Label fx:id="nomeMariposaErrorLabel" alignment="CENTER_LEFT" prefHeight="25" prefWidth="375" styleClass="labels_error" text="">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+    </VBox>
+
+    <Button fx:id="editMoth" onAction="#editMoth" styleClass="editBtn" text="Salvar">
+        <font>
+            <Font size="18.0" />
+        </font>
+    </Button>
+
+</VBox>

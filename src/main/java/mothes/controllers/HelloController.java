@@ -44,16 +44,7 @@ public class HelloController {
     private double xOffset = 0;
     private double yOffset = 0;
 
-    public boolean checkLogin(String email, String senha) throws Exception {
-
-        //Cria um objeto UsuarioDao e uma lista de usuários com todos os email e senhas.
-        UsuarioDAO loginUsuarios = new UsuarioDAO();
-        Usuario loginUser = loginUsuarios.getUserByEmail(email);
-
-        if (loginUser == null){
-            loginErrorLabel.setText("Email ou senha incorretos!");
-            return false;
-        }
+    public boolean checkLogin(String email, String senha, Usuario loginUser, Mariposa mariposa) throws Exception {
 
         String senhaHash = loginUser.getSenha();
         String salt64 = loginUser.getSalt64();
@@ -65,16 +56,10 @@ public class HelloController {
         if(senhaHash.equals(senhaLoginHash)){
             loginErrorLabel.setText("");
 
-            Mariposa mariposa = MariposaDAO.getMariposaByUsuarioID(loginUser.getId());
             if(mariposa == null){
                 return false;
             }
 
-            loginUser.setSalt64("");
-            loginUser.setSenha("");
-            LocalStorage.saveUserInfo(loginUser, mariposa);
-
-            System.out.println(LocalStorage.getPath());
             return true;
         }else {
             loginErrorLabel.setText("Email ou senha incorretos!");
@@ -85,13 +70,32 @@ public class HelloController {
 
     public void login(ActionEvent event) throws Exception {
 
+        byte[] saltTeste = PasswordHash.generateSalt();
+        String senhaTest = PasswordHash.hashPassword("123Deky!Harvey", saltTeste);
+        String saltTesteStr = Base64.getEncoder().encodeToString(saltTeste);
+
         //Pega o email e senha do usuário
         String email = emailField.getText();
         String senha = passwordField.getText();
 
-        if(this.checkLogin(email, senha)){
+        UsuarioDAO loginUsuarios = new UsuarioDAO();
+        Usuario loginUser = loginUsuarios.getUserByEmail(email);
+
+        if (loginUser == null){
+            loginErrorLabel.setText("Email ou senha incorretos!");
+            return;
+        }
+
+        Mariposa mariposa = MariposaDAO.getMariposaByUsuarioID(loginUser.getId());
+
+        if(this.checkLogin(email, senha, loginUser, mariposa)){
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/mothes/home.fxml"));
+
+            loader.setControllerFactory(_ -> new HomeController(loginUser, mariposa));
+
             root = loader.load();
+
+            HomeController homePage = loader.getController();
 
             root.setOnMousePressed(Mevent -> {
                 xOffset = Mevent.getSceneX();
@@ -102,9 +106,6 @@ public class HelloController {
                 stage.setX(Mevent.getScreenX() - xOffset);
                 stage.setY(Mevent.getScreenY() - yOffset);
             });
-
-            HomeController homePage = loader.getController();
-            //homePage.displayTeste(email, senha);
 
             stage = new Stage();
             scene = new Scene(root);

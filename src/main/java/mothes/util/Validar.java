@@ -118,8 +118,52 @@ public class Validar {
                 )
         );
 
-
         return newEstudo;
     }
+
+    public static String emailIsValid(String email){
+        if(email.isEmpty()){
+            return "";
+        }
+
+        if(!email.contains("@")){
+            return "Email inválido!";
+        }
+
+        return "";
+    }
+
+    public static String oldPassworldIsValid(String oldPassword){
+        if(oldPassword.isEmpty()){
+            return "Insira sua senha atual!";
+        }
+
+        return "";
+    }
+
+    public static String passwordIsValid(String password, String confirmPassword){
+        if (!password.equals(confirmPassword)) {
+            return "As senhas não são iguais!";
+        }
+
+        if(!password.isEmpty() && confirmPassword.isEmpty()){
+            return "A senha está vazia!";
+        }
+
+        if(password.isEmpty() && !confirmPassword.isEmpty()){
+            return "A senha está vazia!";
+        }
+
+        return "";
+    }
+
+    public static String apelidoIsValid(String apelido){
+        if(apelido.length() > 45){
+            return "Apelido deve ter menos de 45 caracteres";
+        }
+
+        return "";
+    }
+
 
 }

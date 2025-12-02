@@ -1,0 +1,22 @@
+.editUser {
+    -fx-background-color: #BF8449;
+}
+
+.labels {
+    -fx-text-fill: #FBF6F2;
+    -fx-font-weight: bold;
+}
+
+.labels_error {
+    -fx-text-fill: #B22222;
+}
+
+.editBtn {
+    -fx-background-color: #ECB37A;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.editBtn:hover {
+    -fx-background-color: #f3a455;
+}

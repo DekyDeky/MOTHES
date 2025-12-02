@@ -148,4 +148,30 @@ public class UsuarioDAO {
         }
     }
 
+    public static boolean editUser(Usuario usuario){
+        Connection con = Conexao.getConexao();
+        PreparedStatement stmt = null;
+
+        try {
+            String query = "UPDATE usuarios SET apelido = ?, email = ?, senhaHash = ?, salt = ? WHERE idUsuario = ?";
+            stmt = con.prepareStatement(query);
+            stmt.setString(1, usuario.getApelido());
+            stmt.setString(2, usuario.getEmail());
+            stmt.setString(3, usuario.getSenha());
+            stmt.setString(4, usuario.getSalt64());
+            stmt.setInt(5, usuario.getId());
+
+            stmt.executeUpdate();
+
+            return true;
+        } catch (SQLException ex) {
+            new Alert(Alert.AlertType.ERROR,
+                    "Erro ao editar usuário no banco de dados.\nErro: " + ex.getMessage()
+            ).showAndWait();
+            return false;
+        } finally {
+            Conexao.fecharConexao(con, stmt);
+        }
+    }
+
 }

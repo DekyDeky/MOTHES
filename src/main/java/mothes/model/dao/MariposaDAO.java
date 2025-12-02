@@ -103,4 +103,26 @@ public class MariposaDAO {
         }
     }
 
+    public static boolean changeMariposaName(String newName, int idMariposa){
+        Connection con = Conexao.getConexao();
+        PreparedStatement stmt = null;
+
+        try {
+            String query = "UPDATE mariposa SET nome = ? WHERE idMariposa = ?";
+            stmt = con.prepareStatement(query);
+            stmt.setString(1, newName);
+            stmt.setInt(2, idMariposa);
+
+            stmt.executeUpdate();
+
+            return true;
+        } catch (SQLException ex) {
+            new Alert(Alert.AlertType.ERROR,
+                    "Erro ao editar nome da Mariposa no banco de dados.\nErro: " + ex.getMessage()
+            ).showAndWait();
+            return false;
+        } finally {
+            Conexao.fecharConexao(con, stmt);
+        }
+    }
 }

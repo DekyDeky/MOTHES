@@ -20,4 +20,10 @@ public class PasswordHash {
         random.nextBytes(salt);
         return salt;
     }
+
+    static public boolean checkPassword(String salt64, String password, String encryptedPassword) throws Exception {
+        byte[] salt = Base64.getDecoder().decode(salt64);
+        String passwordLoginHash = hashPassword(password, salt);
+        return encryptedPassword.equals(passwordLoginHash);
+    }
 }

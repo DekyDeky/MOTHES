@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.control.Label;
 
 import java.util.Base64;
+import java.util.List;
 
 public class Usuario {
     private int id;
@@ -16,7 +17,7 @@ public class Usuario {
     private long totalTrabalho;
     private long totalDescanco;
 
-    private transient Label moneyLabel;
+    private transient List<Label> moneyLabels;
 
     public Usuario(){}
 
@@ -74,8 +75,10 @@ public class Usuario {
 
     public void setQntMoeda(int qntMoeda) {
         this.qntMoeda = qntMoeda;
-        if(this.moneyLabel != null){
-            this.moneyLabel.setText("$ " + this.qntMoeda);
+        if(this.moneyLabels != null){
+            for(Label mL : this.moneyLabels){
+                mL.setText("$ " + this.qntMoeda);
+            }
         }
     }
 
@@ -103,7 +106,7 @@ public class Usuario {
         this.totalDescanco = totalDescanco;
     }
 
-    public void setMoneyLabel(Label moneyLabel) {
-        this.moneyLabel = moneyLabel;
+    public void setMoneyLabels(List<Label> moneyLabels) {
+        this.moneyLabels = moneyLabels;
     }
 }

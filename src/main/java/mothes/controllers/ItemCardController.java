@@ -10,8 +10,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import mothes.model.bean.Acessorio;
 import mothes.model.bean.Cosmetico;
+import mothes.model.bean.Decoracao;
 import mothes.model.bean.Usuario;
-import mothes.model.dao.CosmeticoDao;
+import mothes.model.dao.CosmeticoDAO;
 
 public class ItemCardController {
 
@@ -21,20 +22,32 @@ public class ItemCardController {
     @FXML private Button itemBtnEquipar;
     private Cosmetico cosmetico;
     private Usuario usuario;
-    private ImageView mothEquipedHatImageView;
+    private ImageView imageUsed;
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 
-    public void setMothEquipedHatImageView(ImageView mothEquipedHatImageView) {
-        this.mothEquipedHatImageView = mothEquipedHatImageView;
+    public void setImageUsed(ImageView imageUsed) {
+        this.imageUsed = imageUsed;
     }
 
     public void setItemCard(Cosmetico item) {
         this.cosmetico = item;
 
         Image img = new Image(item.getImagemUrl());
+
+        if(item instanceof Acessorio){
+            itemImg.setImage(img);
+            itemImg.setFitWidth(100);
+            itemImg.setFitHeight(100);
+            itemImg.setPreserveRatio(true);
+        }else if (item instanceof Decoracao){
+            itemImg.setImage(img);
+            itemImg.setFitWidth(100);
+            itemImg.setFitHeight(160);
+            itemImg.setPreserveRatio(true);
+        }
 
         itemNome.setText(item.getNome());
 
@@ -48,23 +61,19 @@ public class ItemCardController {
         itemBtnComprar.setCursor(Cursor.HAND);
         itemBtnEquipar.setCursor(Cursor.HAND);
 
-        itemImg.setImage(img);
-        itemImg.setFitWidth(100);
-        itemImg.setFitHeight(100);
-        itemImg.setPreserveRatio(true);
+
     }
 
     public void comprarItem(ActionEvent event) {
-        if(usuario.getQntMoeda() >= cosmetico.getPreco()){
+        if(this.usuario.getQntMoeda() >= this.cosmetico.getPreco()){
 
-            itemBtnComprar.setVisible(false);
-            itemBtnEquipar.setVisible(true);
-            usuario.setQntMoeda(usuario.getQntMoeda() - cosmetico.getPreco());
-            cosmetico.setComprado(true);
+            this.itemBtnComprar.setVisible(false);
+            this.itemBtnEquipar.setVisible(true);
+            this.usuario.setQntMoeda(this.usuario.getQntMoeda() - this.cosmetico.getPreco());
+            this.cosmetico.setComprado(true);
 
-            if(cosmetico instanceof Acessorio acessorio){
-                CosmeticoDao.saveBuyedAcessorios(acessorio, usuario);
-            }
+            CosmeticoDAO.saveBuyedCosmetic(this.cosmetico, this.usuario);
+
 
         } else {
             new Alert(Alert.AlertType.ERROR,
@@ -74,18 +83,18 @@ public class ItemCardController {
     }
 
     public void equiparItem(ActionEvent event) {
-        if(cosmetico instanceof Acessorio acessorio){
-            if(!acessorio.isUsando()){
-                Image hatImg = new Image(acessorio.getImagemUrl());
-                cosmetico.setUsando(true);
-                mothEquipedHatImageView.setImage(hatImg);
-                itemBtnEquipar.setText("Desequipar");
-            }else {
-                mothEquipedHatImageView.setImage(null);
-                itemBtnEquipar.setText("Equipar");
-                cosmetico.setUsando(false);
-            }
+
+        if(!cosmetico.isUsando()){
+            Image cosmImg = new Image(cosmetico.getImagemUrl());
+            cosmetico.setUsando(true);
+            imageUsed.setImage(cosmImg);
+            itemBtnEquipar.setText("Desequipar");
+        }else {
+            imageUsed.setImage(null);
+            itemBtnEquipar.setText("Equipar");
+            cosmetico.setUsando(false);
         }
+
     }
 
 }

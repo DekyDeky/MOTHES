@@ -71,7 +71,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Label fx:id="mothNameLabel" layoutX="187.0" layoutY="9.0" text="Mariposa">
+                  <Label fx:id="mothNameLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="-2.0" layoutY="9.0" prefHeight="32.0" prefWidth="463.0" text="Mariposa">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -87,6 +87,7 @@
                   </ImageView>
                </graphic>
             </Button>
+            <ImageView fx:id="decoEquipedLampImageView" fitHeight="320.0" fitWidth="200.0" layoutX="43.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true" />
          </children>
       </Pane>
       <Pane fx:id="homeMenuPane" layoutX="543.0" layoutY="11.0" prefHeight="472.0" prefWidth="300.0" style="-fx-border-radius: 10px; -fx-background-radius: 10px;">
@@ -95,9 +96,9 @@
                <children>
                   <ScrollPane prefHeight="380.0" prefWidth="300.0" style="-fx-background-color: #BF8449;" styleClass="menu">
                      <content>
-                        <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" minHeight="380.0" prefHeight="450.0" prefWidth="278.0">
+                        <FlowPane fx:id="decoShopContentPane" alignment="TOP_CENTER" columnHalignment="CENTER" minHeight="380.0" orientation="VERTICAL" prefHeight="450.0" prefWidth="278.0">
                            <children>
-                              <Label fx:id="moneyLabel" alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="20.0" prefWidth="275.0" styleClass="moneyLabel" text="\$ 0">
+                              <Label fx:id="decoMoneyLabel" alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="20.0" prefWidth="275.0" styleClass="moneyLabel" text="\$ 0">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -115,15 +116,25 @@
                   </ScrollPane>
                </children>
             </Pane>
-            <Pane fx:id="configPane" layoutY="90.0" prefHeight="380.0" prefWidth="300.0" style="-fx-background-radius: 10px;" styleClass="menu" visible="false">
+            <VBox fx:id="configPane" alignment="CENTER" layoutY="90.0" prefHeight="380.0" prefWidth="300.0" spacing="25.0" styleClass="menu" visible="false">
                <children>
-                  <Button fx:id="exitBtn" layoutX="81.0" layoutY="281.0" mnemonicParsing="false" onAction="#closeProgram" prefHeight="51.0" prefWidth="139.0" styleClass="menuShowBtn" text="Sair">
+                  <Button fx:id="editUserBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#showEditUser" prefHeight="50.0" prefWidth="250.0" styleClass="menuShowBtn" text="Editar Usuário">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="editMariposaBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#showEditMoth" prefHeight="50.0" prefWidth="250.0" styleClass="menuShowBtn" text="Editar Mariposa">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="exitBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#closeProgram" prefHeight="50.0" prefWidth="250.0" styleClass="menuShowBtn" text="Sair">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Button>
                </children>
-            </Pane>
+            </VBox>
             <Pane fx:id="hatsShopScrollPane" layoutY="90.0" prefHeight="380.0" prefWidth="300.0" style="-fx-background-radius: 10px;" styleClass="menu" visible="false">
                <children>
                   <ScrollPane prefHeight="380.0" prefWidth="300.0" style="-fx-background-color: #BF8449;" styleClass="menu">

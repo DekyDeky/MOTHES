@@ -39,6 +39,8 @@
 
 .menu {
     -fx-background-color: #BF8449;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
 }
 
 

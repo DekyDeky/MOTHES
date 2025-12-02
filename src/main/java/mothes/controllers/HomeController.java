@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -15,11 +16,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import mothes.model.bean.Acessorio;
-import mothes.model.bean.Estudo;
-import mothes.model.bean.Mariposa;
-import mothes.model.bean.Usuario;
-import mothes.model.dao.CosmeticoDao;
+import mothes.model.bean.*;
+import mothes.model.dao.CosmeticoDAO;
 import mothes.model.dao.EstudoDAO;
 import mothes.model.dao.MariposaDAO;
 import mothes.model.dao.UsuarioDAO;
@@ -31,12 +29,14 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Flow;
 
 public class HomeController {
 
     @FXML private AnchorPane homePane; //Tela total
 
     @FXML private ImageView mothEquipedHatImageView;
+    @FXML private ImageView decoEquipedLampImageView;
 
     //Sessão Timer
     @FXML private Label mothNameLabel;
@@ -101,6 +101,9 @@ public class HomeController {
 
     //Elementos da loja
     @FXML private Label moneyLabel;
+    @FXML private Label decoMoneyLabel;
+    @FXML private List<Label> moneyLabels;
+    @FXML private FlowPane decoShopContentPane;
 
     //Info Moth Labels
     @FXML private Label actualStageLabel;
@@ -111,20 +114,27 @@ public class HomeController {
     @FXML private Button feedMothBtn;
 
     //Dados da sessão atual
-    private Usuario sessaoAtual = LocalStorage.loadUser();
-    private Mariposa mariposa = LocalStorage.loadMariposa();
+    private Usuario sessaoAtual;
+    private Mariposa mariposa;
     private List<Estudo> estudos;
 
     private Estudo estudoAtual; // Estudo selecionado atual
     private Temporizador temporizador; //Temporizador do usuário
 
-    private List<Acessorio> acessorios = new ArrayList<>(); //debug teste
+    private List<Acessorio> acessorios = new ArrayList<>();
+    private List<Decoracao> decoracoes = new ArrayList<>();
 
     Stage stage;
 
+    public HomeController(Usuario sessaoAtual, Mariposa mariposa) {
+        this.sessaoAtual = sessaoAtual;
+        this.mariposa = mariposa;
+    }
+
     // Inicializador
     public void initialize() throws IOException, SQLException {
-        sessaoAtual.setMoneyLabel(moneyLabel);
+        moneyLabels = List.of(moneyLabel, decoMoneyLabel);
+        sessaoAtual.setMoneyLabels(moneyLabels);
         mariposa.setNectarQuantityLabel(nectarQuantityLabel);
         nextStageLabel.setText("Quantidade Necessária para o próximo nível: " + mariposa.getPrecoEstagio());
         estudos = EstudoDAO.getEstudoByUsuarioID(sessaoAtual.getId());
@@ -152,6 +162,7 @@ public class HomeController {
 
         loadEstudos();
         loadAcessories();
+        loadDecoracoes();
 
         for (Node pane : menuPanes) {
             pane.setManaged(false);
@@ -168,16 +179,18 @@ public class HomeController {
         }
 
         moneyLabel.setText("$ " + sessaoAtual.getQntMoeda());
+        decoMoneyLabel.setText("$ " + sessaoAtual.getQntMoeda());
 
         actualStageLabel.setText("Estágio Atual: " + mariposa.getEstagio());
         mothNameLabel.setText(mariposa.getNome());
 
         showTimeConfig();
+
     }
 
     private void loadAcessories() throws IOException, SQLException {
 
-        acessorios = CosmeticoDao.getAcessorios(sessaoAtual);
+        acessorios = CosmeticoDAO.getAcessorios(sessaoAtual);
 
         for(Acessorio acessorio : acessorios) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/mothes/itemCard.fxml"));
@@ -186,10 +199,28 @@ public class HomeController {
             ItemCardController controller = loader.getController();
             controller.setItemCard(acessorio);
             controller.setUsuario(sessaoAtual);
-            controller.setMothEquipedHatImageView(mothEquipedHatImageView);
+            controller.setImageUsed(mothEquipedHatImageView);
 
             hatsShopContentPane.getChildren().add(card);
         }
+    }
+
+    private void loadDecoracoes() throws  IOException, SQLException {
+
+        decoracoes = CosmeticoDAO.getDecoracoes(sessaoAtual);
+
+        for(Decoracao d : decoracoes) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/mothes/itemCard.fxml"));
+            Parent card = loader.load();
+
+            ItemCardController controller = loader.getController();
+            controller.setItemCard(d);
+            controller.setUsuario(sessaoAtual);
+            controller.setImageUsed(decoEquipedLampImageView);
+
+            decoShopContentPane.getChildren().add(card);
+        }
+
     }
 
     public void loadEstudos() throws IOException {
@@ -270,6 +301,39 @@ public class HomeController {
     public void showInfoMoth(){
         allPanes.actualPane(infoStagePane);
         allPanes.selectNavButton(infoStageBtn, false);
+    }
+
+    public void showEditUser() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/mothes/editUser.fxml"));
+        Scene editUserScene = new Scene(fxmlLoader.load());
+
+        EditUserController controller = fxmlLoader.getController();
+        controller.setSessaoAtual(sessaoAtual);
+
+
+        Stage editUserStage = new Stage();
+        editUserStage.setTitle("Editar Usuário");
+        editUserStage.setScene(editUserScene);
+        editUserStage.setResizable(false);
+
+        controller.setStage(editUserStage);
+
+        editUserStage.show();
+    }
+
+    public void showEditMoth() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/mothes/editMoth.fxml"));
+        Scene editUserScene = new Scene(fxmlLoader.load());
+
+        Stage editMothStage = new Stage();
+        editMothStage.setTitle("Editar Usuário");
+        editMothStage.setScene(editUserScene);
+        editMothStage.setResizable(false);
+
+        EditMothController controller = fxmlLoader.getController();
+        controller.setEditMoth(sessaoAtual, mariposa, editMothStage, mothNameLabel);
+
+        editMothStage.show();
     }
 
     public void createEstudo() throws ParseException, IOException {
@@ -474,5 +538,4 @@ public class HomeController {
         }
 
     }
-
 }
